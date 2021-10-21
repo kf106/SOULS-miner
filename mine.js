@@ -48,14 +48,29 @@ function mine (soul, incantation) {
 }
 
 console.log('Starting mining');
+arg1 = process.argv[2];
+arg2 = process.argv[3];
 
-const soul = '951503ab956ad15f4006d702f5d40cc329e93a14f2df6a6b179e4c807cf20029';
+console.log('Usage: node mine.js <soul> <starting point>');
+console.log('If no arguments are provided, this miner will mine SOUL #1');
+
+let soul = '951503ab956ad15f4006d702f5d40cc329e93a14f2df6a6b179e4c807cf20029';
+if (arg1.length === 64) {
+  let re = new RegExp('/[0-9A-Fa-f]{64}/g');
+  if (re.test(arg1)) { soul = arg1 }
+}
+
+let start = 0;
+if (arg2) {
+  start = parseInt(arg2);
+}
+
 console.log('Mining: ' + soul);
 
 var mineNFT = function () {
   let bestResult = 0;
   let bestIncantation = 0;
-  for (let i = 17000000; i < 2**256; i++) {
+  for (let i = start; i < 2**256; i++) {
     if ((i % 1000000) === 0) { 
       process.stdout.write('\r' + i.toString()); 
     }
@@ -64,7 +79,7 @@ var mineNFT = function () {
     if (result > bestResult) {
       bestResult = result;
       bestIncantation = rndHx;
-      console.log('\nMined ' + bestIncantation + ' with result ' + bestResult);
+      console.log('\nMined ' + bestIncantation + ' which would give level ' + bestResult);
     }
   }
 }
