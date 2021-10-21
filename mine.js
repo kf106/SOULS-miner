@@ -51,14 +51,14 @@ function mine (soul, incantation) {
 console.log('Starting mining');
 arg1 = process.argv[2];
 arg2 = process.argv[3];
+console.log(arg1);
 
 console.log('Usage: node mine.js <soul> <starting point>');
 console.log('If no arguments are provided, this miner will mine SOUL #1');
 
 let soul = '951503ab956ad15f4006d702f5d40cc329e93a14f2df6a6b179e4c807cf20029';
 if ((arg1) && (arg1.length === 64)) {
-  let re = new RegExp('/[0-9A-Fa-f]{64}/g');
-  if (re.test(arg1)) { soul = arg1 }
+  soul = arg1
 }
 
 let start = 0;
