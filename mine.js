@@ -1,4 +1,5 @@
 const keccak256 = require('js-sha3').keccak256;
+const fs = require('fs');
 
 // xor two buffers (why is this not built in?)
 function xor (buf1, buf2) {
@@ -55,7 +56,7 @@ console.log('Usage: node mine.js <soul> <starting point>');
 console.log('If no arguments are provided, this miner will mine SOUL #1');
 
 let soul = '951503ab956ad15f4006d702f5d40cc329e93a14f2df6a6b179e4c807cf20029';
-if (arg1.length === 64) {
+if ((arg1) && (arg1.length === 64)) {
   let re = new RegExp('/[0-9A-Fa-f]{64}/g');
   if (re.test(arg1)) { soul = arg1 }
 }
@@ -66,6 +67,11 @@ if (arg2) {
 }
 
 console.log('Mining: ' + soul);
+fs.appendFileSync('./results.txt', '\nMining: ' + soul, err => {
+  if (err) {
+    console.error(err)
+  }
+});
 
 var mineNFT = function () {
   let bestResult = 0;
@@ -79,7 +85,13 @@ var mineNFT = function () {
     if (result > bestResult) {
       bestResult = result;
       bestIncantation = rndHx;
-      console.log('\nMined ' + bestIncantation + ' which would give level ' + bestResult);
+      const resultOutput = '\nMined ' + bestIncantation + ' which would give level ' + bestResult;
+      console.log(resultOutput);
+      fs.appendFileSync('./results.txt', resultOutput, err => {
+        if (err) {
+          console.error(err)
+        }
+      });
     }
   }
 }
